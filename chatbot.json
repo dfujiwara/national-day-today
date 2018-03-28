@@ -1,0 +1,9 @@
+{
+    "muxbots_lib_version": "1.0",
+    "type": "feedbot",
+    "title": "National Day Today",
+    "intro_message": "Will show you what a special day today is!",
+    "image": "icon.png",
+    "source_url": "national_day_today.js",
+    "published_url": "https://dfujiwara.github.io/national-day-today-bot/chatbot.json"
+}
