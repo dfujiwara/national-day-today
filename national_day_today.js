@@ -76,7 +76,7 @@ const parsePage = (pageContent) => {
   }
   let monthString = monthStringMap[currentDate.getMonth()]
   let dateString = `${monthString} ${currentDate.getDate()}`
-  const pattern = `<h4>(.*) &#8211; ${dateString}</h4>`
+  const pattern = `<h4>([^>]*) &#8211; ${dateString}</h4>`
   const regEx = new RegExp(pattern)
   const dayDescription = (regEx.exec(pageContent))[1]
   return `${dateString} is ${dayDescription}`
