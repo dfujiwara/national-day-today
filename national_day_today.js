@@ -7,6 +7,7 @@ muxbots.onFeedPull((callback) => {
 })
 
 const pageURL = 'https://nationaltoday.com/what-is-today/'
+const nationalDayNotFoundError = 'Could not find the national day for today'
 
 const handleOnFeedPull = async (callback) => {
   if (!shouldFetch()) {
@@ -31,9 +32,13 @@ const handleOnFeedPull = async (callback) => {
     muxbots.localStorage.setItem('lastFetchDate', currentDate.toDateString())
   } catch (error) {
     console.log(error)
-    muxbots.newResponse()
-      .addNoResultsMessage('An issue occurred while fetching web page')
-      .send(callback)
+    const response = muxbots.newResponse()
+    if (error === nationalDayNotFoundError) {
+      response.addNoResultsMessage('Could not find the national day for today. Please try again later!')
+    } else {
+      response.addNoResultsMessage('An issue occurred while fetching web page.')
+    }
+    response.send(callback)
   }
 }
 
@@ -78,6 +83,10 @@ const parsePage = (pageContent) => {
   let dateString = `${monthString} ${currentDate.getDate()}`
   const pattern = `<h4>([^>]*) &#8211; ${dateString}</h4>`
   const regEx = new RegExp(pattern)
-  const dayDescription = (regEx.exec(pageContent))[1]
+  const result = (regEx.exec(pageContent))
+  if (!result) {
+    throw nationalDayNotFoundError
+  }
+  const dayDescription = result[1]
   return `${dateString} is ${dayDescription}`
 }
